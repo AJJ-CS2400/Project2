@@ -3,66 +3,83 @@ public class Calculator
     public String convertToPostfix(String infix)
     {
         // Sanitize inputs
-        // stub
-
-        // Method
-        LinkedStack<Character> operatorStack = new LinkedStack<Character>();
-        String postfix = "";
-        char nextCharacter;
-        int infixParse = 0;
-        char topOperator;
-
-        while (infixParse < infix.length())
+        if (infix.isEmpty()) {return infix;}
+        else if (infix == null) {throw new NullPointerException();}
+        else
         {
-            nextCharacter = infix.charAt(infixParse);
 
-            switch (nextCharacter)
+            // Method
+            LinkedStack<Character> operatorStack = new LinkedStack<>();
+            String postfix = "";
+            char nextCharacter;
+            char topOperator;
+            int count = 0;
+
+            while (count < infix.length()) // iterate through the entire infix expression
             {
-                case '^':
-                    operatorStack.push(nextCharacter);
-                    break;
-                case '+': case '-': case '*': case '/':
-                    while (!operatorStack.isEmpty() && precedence(nextCharacter) <= precedence(operatorStack.peek()))
-                    {
-                        postfix += operatorStack.pop();
-                    }
-                    operatorStack.push(nextCharacter);
-                    break;
-                case '(':
-                    operatorStack.push(nextCharacter);
-                    break;
-                case ')':
-                    topOperator = operatorStack.pop();
-                    while (topOperator != '(')
-                    {
-                        postfix += topOperator;
+                nextCharacter = infix.charAt(count);
+
+                switch (nextCharacter)
+                {
+                    case '^':
+                        operatorStack.push(nextCharacter);
+                        break;
+                    case '+':
+                    case '-':
+                    case '*':
+                    case '/':
+                        while (!operatorStack.isEmpty() && precedence(nextCharacter) <= precedence(operatorStack.peek()))
+                        {
+                            postfix += operatorStack.pop();
+                        }
+                        operatorStack.push(nextCharacter);
+                        break;
+                    case '(':
+                        operatorStack.push(nextCharacter);
+                        break;
+                    case ')':
                         topOperator = operatorStack.pop();
-                    }
-                    break;
-                default: break; // ignore unexpected characters
+                        while (topOperator != '(')
+                        {
+                            postfix += topOperator;
+                            topOperator = operatorStack.pop();
+                        }
+                        break;
+                    default:  // if variable, append to postfix
+                        if (Character.isLetter(nextCharacter))
+                        {
+                            postfix += nextCharacter;
+                        }
+                } // end switch
+
+                count++;
             }
+            while (!operatorStack.isEmpty())
+            {
+                topOperator = operatorStack.pop();
+                postfix += topOperator;
+            } // append the rest of the operators left in the stack
 
-            infixParse++;
+            return postfix;
         }
-
-        return null; // stub
     } // end convertToPostfix
 
     private int precedence(char c)
     {
-        switch (c) {
-            case '+':
+        switch (c)
+        {
+            case '+':       // precedence of += is less than */
             case '-':
                 return 1;
-            break;
             case '*':
             case '/':
                 return 2;
-            break;
-            case '^':
-                return 3;
-            break;
         }
         return -1;
     } // end precedence
+
+    public int evaluatePostfix(String postfix)
+    {
+        return 0; // stub
+    }
 }

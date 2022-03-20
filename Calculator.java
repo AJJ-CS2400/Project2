@@ -1,161 +1,171 @@
-public class Calculator<T> { // converts infix expression to the eqivalent postfix expression
-    static String convertToPostfix(String infix)
-     {
-        // Sanitize user inputs
-        if (infix.isEmpty())
-        {
+public class Calculator {
+    public static void main(String[] args) {
+        System.out.println("Passing string \"a*b/(c-a)+d*e\" to convertToPostFix method");
+        String infix = "a*b/(c-a)+d*e";
+        String postfix = Calculator.convertToPostfix(infix);
+        System.out.println("Outputted postfix string: \"" + postfix + "\"");
+
+        System.out.println("Passing postfix string \"" + postfix + "\" to evaluatePostfix method");
+        System.out.println("Assuming: a=2, b=3, c=4, d=5, e=6");
+        int result = Calculator.evaluatePostfix("ab*ca-de*+/");
+        System.out.println("Outputted result: " + result);
+    }
+
+    /**
+     * Converts an infix expression to a postfix expression
+     *
+     * @param infix the infix expression given as a String
+     * @return Returns the postfix expression as a String
+     */
+    public static String convertToPostfix(String infix) {
+        // Sanitize inputs
+        if (infix.isEmpty()) {
             return infix;
-        } // retruns null if the infix expression is empty
-        else if (infix == null)
-         {
+        } else if (infix == null) {
             throw new NullPointerException();
         } else {
-            // linked stack method implementation
-            LinkedStack<Character> operatorStack = new LinkedStack<>();
+
+            // Method
+            StackInterface<Character> operatorStack = new LinkedStack<>(); // LinkedStack implementation
             String postfix = "";
             char nextCharacter;
             char topOperator;
             int count = 0;
 
-            while (count < infix.length()) // iterating through the entire infix expression
+            while (count < infix.length()) // iterate through the entire infix expression
             {
-                nextCharacter = infix.charAt(count); // counts each letter within the infix expression
+                nextCharacter = infix.charAt(count);
 
                 switch (nextCharacter) {
                     case '^':
-                        operatorStack.push(nextCharacter); // pushes the character into the stack
+                        operatorStack.push(nextCharacter);
                         break;
                     case '+':
                     case '-':
                     case '*':
                     case '/':
                         while (!operatorStack.isEmpty()
-                                && precedence(nextCharacter) <= precedence(operatorStack.peek()))
-                        {
-                            postfix += operatorStack.pop(); // pops the character
+                                && precedence(nextCharacter) <= precedence(operatorStack.peek())) {
+                            postfix += operatorStack.pop();
                         }
-                        operatorStack.push(nextCharacter); // pushes the operator '('
+                        operatorStack.push(nextCharacter);
                         break;
                     case '(':
-                        operatorStack.push(nextCharacter); // pushes the operator ')'
+                        operatorStack.push(nextCharacter);
                         break;
                     case ')':
-                        topOperator = operatorStack.pop(); // system calls to pop the operator within the '()' into the
-                                                           // stack
-                        while (topOperator != '(')
-                        {
+                        topOperator = operatorStack.pop();
+                        while (topOperator != '(') {
                             postfix += topOperator;
                             topOperator = operatorStack.pop();
                         }
                         break;
                     default: // if variable, append to postfix
-                        if (Character.isLetter(nextCharacter))
-                        {
+                        if (Character.isLetter(nextCharacter)) {
                             postfix += nextCharacter;
                         }
+                        break; // ignore unexpected characters
                 } // end switch
-
                 count++;
             }
-            while (!operatorStack.isEmpty())
-            {
+            while (!operatorStack.isEmpty()) {
                 topOperator = operatorStack.pop();
                 postfix += topOperator;
-            } // append the rest of the operators left in the stack
+            } // append the rest of the operators left in the stack, if any
 
             return postfix;
         }
     } // end convertToPostfix
 
-    static int precedence(char c) // checks for the precedence of each character as it iterates through each case
-    {                             // allows the program to interate and print out in correctly
-        switch (c)
-         {
+    // method for determining the precedence of operations
+    private static int precedence(char c) {
+        switch (c) {
             case '+': // precedence of += is less than */
             case '-':
                 return 1;
-            case '*': // precedence of */ is higher than +-
+            case '*':
             case '/':
                 return 2;
         }
-        return -1;
+        return -1; // failsafe
     } // end precedence
-      // beginning of evaluating Postfix method
 
+    /**
+     * Evaluates a postfix expression, given a=2,b=3,c=4,d=5,and e=6 (a-z = 2-28)
+     *
+     * @param postfix the postfix expression given as a String
+     * @return Returns the evaluation of the postfix expression as an Integer.
+     */
     public static int evaluatePostfix(String postfix) {
-        StackInterface<Integer> valueStack = new LinkedStack<Integer>();
+        // Sanitize inputs
+        if (postfix.isEmpty()) {
+            return 0;
+        } else if (postfix == null) {
+            throw new NullPointerException();
+        } else {
+            StackInterface<Integer> valueStack = new ResizeableArrayStack<>(); // ResizeableArrayStack implementation
 
-        char nextCharacter;
-        int characterCount = postfix.length();
-        int operandOne;
-        int operandTwo;
-        int result;
+            char nextCharacter;
+            int characterCount = postfix.length();
+            int operandOne;
+            int operandTwo;
+            int result;
 
-        int i = 0;
-        while (i < characterCount) // iterates through the loop and checks each character
-        {
-            nextCharacter = postfix.charAt(i); // initializes the while loop at 0
+            int i = 0;
+            while (i < characterCount) {
+                nextCharacter = postfix.charAt(i);
 
-            switch (nextCharacter) // each charater aligns with the valua manually inputted
-            {
-                case 'a':
-                case 'b':
-                case 'c':
-                case 'd':
-                case 'e':
-                    int temp = Character.getNumericValue(nextCharacter) - 8; // getNumericValue makes a-z = to 10-35
-                    valueStack.push(temp); // subtracting 8 will make the value of a = 2, b = 3, etc.
-                    break;
+                switch (nextCharacter) {
+                    case 'a':
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'e':
+                        int temp = Character.getNumericValue(nextCharacter) - 8; // converts a-z -> 10-35
+                        valueStack.push(temp); // subtracting 8 to this value will give:
+                        break; // a=2,b=3,c=4,d=5,e=6
 
-                case '+': // case for the '+'
-                    operandTwo = valueStack.pop(); // pops out the values of oprand two
-                    operandOne = valueStack.pop(); // pops out the values of oprand one
-                    result = operandOne + operandTwo; // adds oprand one and oprand two together to get result
-                    valueStack.push(result); // pushes the result into the stack
-                    break;
+                    case '+':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne + operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                case '-': // case for '-'
-                    operandTwo = valueStack.pop(); // pops out the values of oprand two
-                    operandOne = valueStack.pop(); // pops out the values of oprand one
-                    result = operandOne - operandTwo; // subtracts oprand one and oprand two together to get result
-                    valueStack.push(result); // pushes the result into the stack
-                    break;
+                    case '-':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne - operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                case '*': // case for '*'
-                    operandTwo = valueStack.pop(); // pops out the values of oprand two
-                    operandOne = valueStack.pop(); // pops out the values of operand one
-                    result = operandOne * operandTwo; // multiplies operand one and oprand two
-                    valueStack.push(result); // pushes the result into the stack
-                    break;
+                    case '*':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne * operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                case '/': // case for '/'
-                    operandTwo = valueStack.pop(); // pops out operand two
-                    operandOne = valueStack.pop(); // pops out oprand one
-                    result = operandOne / operandTwo; // divides operand one and operand two
-                    valueStack.push(result); // pushes the result into the stack
-                    break;
+                    case '/':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne / operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                default:
-                    break;
+                    case '^':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = (int) Math.pow(operandOne, operandTwo);
+                        valueStack.push(result);
+                        break;
+
+                    default:
+                        break; // ignore unexpected characters
+                }
+                i++;
             }
-            i++;
+            return valueStack.peek();
         }
-        return valueStack.peek(); // retruns the values back to the peek function
-    }
-
-    // main method
-    public static void main(String[] args)
-    {
-        //beginning of infix to postfix conversion
-        String infix = "a*b/(c-a)+d*e"; // infix expression inputted manually
-        System.out.println("Infix Expression: " + infix); // system prints out infix expression
-        String postfix = convertToPostfix(infix); // calls for the conversion of infix to postfix method
-        System.out.println("Postfix Expression:  " + postfix); // system prints out the infix and postfix translation
-
-        // beginning of evaluation of postfix method
-        Calculator test = new Calculator(); // set calculator to equal new object
-        int postfixResult = test.evaluatePostfix("ab*ca-de*+/"); // postfix expression inputted manually
-        System.out.println("Postfix Result: " + postfixResult); // system evaluates postfix expression and calls to
-                                                                // print out the postfix evaluation
     }
 }

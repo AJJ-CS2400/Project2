@@ -51,7 +51,6 @@ public class Calculator
                             postfix += nextCharacter;
                         }
                 } // end switch
-
                 count++;
             }
             while (!operatorStack.isEmpty())
@@ -78,8 +77,68 @@ public class Calculator
         return -1;
     } // end precedence
 
-    public int evaluatePostfix(String postfix)
+    public static void main(String[] args)
     {
-        return 0; // stub
+        Calculator test = new Calculator();
+        int temp = test.evaluatePostfix("ab*ca-de*+/");
+        System.out.println(temp);
     }
+
+    public static int evaluatePostfix(String postfix)
+    {
+        StackInterface<Integer> valueStack = new LinkedStack<Integer>();
+
+        char nextCharacter;
+        int characterCount = postfix.length();
+        int operandOne;
+        int operandTwo;
+        int result;
+
+        int i = 0;
+        while (i < characterCount)
+        {
+            nextCharacter = postfix.charAt(i);
+
+            switch (nextCharacter)
+            {
+                case 'a': case 'b': case 'c': case 'd': case 'e':
+                int temp = Character.getNumericValue(nextCharacter) - 8;
+                valueStack.push(temp);
+                break;
+
+                case '+':
+                    operandTwo = valueStack.pop();
+                    operandOne = valueStack.pop();
+                    result = operandOne + operandTwo;
+                    valueStack.push(result);
+                    break;
+
+                case '-':
+                    operandTwo = valueStack.pop();
+                    operandOne = valueStack.pop();
+                    result = operandOne - operandTwo;
+                    valueStack.push(result);
+                    break;
+
+                case '*':
+                    operandTwo = valueStack.pop();
+                    operandOne = valueStack.pop();
+                    result = operandOne * operandTwo;
+                    valueStack.push(result);
+                    break;
+
+                case '/':
+                    operandTwo = valueStack.pop();
+                    operandOne = valueStack.pop();
+                    result = operandOne / operandTwo;
+                    valueStack.push(result);
+                    break;
+
+                default: break;
+            }
+            i++;
+        }
+        return valueStack.peek();
+    }
+}
 }

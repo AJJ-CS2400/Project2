@@ -19,10 +19,6 @@
  - evaluatePostfix implementation
  - main method
 
-## Extra Features
-
- - test cases using JUnit framework
-
 ## Links
 
 - [screencast link]()

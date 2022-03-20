@@ -1,10 +1,13 @@
 public class Calculator<T> { // converts infix expression to the eqivalent postfix expression
-    static String convertToPostfix(String infix) {
+    static String convertToPostfix(String infix)
+     {
         // Sanitize user inputs
-        if (infix.isEmpty()) {
+        if (infix.isEmpty())
+        {
             return infix;
         } // retruns null if the infix expression is empty
-        else if (infix == null) {
+        else if (infix == null)
+         {
             throw new NullPointerException();
         } else {
             // linked stack method implementation
@@ -27,7 +30,8 @@ public class Calculator<T> { // converts infix expression to the eqivalent postf
                     case '*':
                     case '/':
                         while (!operatorStack.isEmpty()
-                                && precedence(nextCharacter) <= precedence(operatorStack.peek())) {
+                                && precedence(nextCharacter) <= precedence(operatorStack.peek()))
+                        {
                             postfix += operatorStack.pop(); // pops the character
                         }
                         operatorStack.push(nextCharacter); // pushes the operator '('
@@ -38,20 +42,23 @@ public class Calculator<T> { // converts infix expression to the eqivalent postf
                     case ')':
                         topOperator = operatorStack.pop(); // system calls to pop the operator within the '()' into the
                                                            // stack
-                        while (topOperator != '(') {
+                        while (topOperator != '(')
+                        {
                             postfix += topOperator;
                             topOperator = operatorStack.pop();
                         }
                         break;
                     default: // if variable, append to postfix
-                        if (Character.isLetter(nextCharacter)) {
+                        if (Character.isLetter(nextCharacter))
+                        {
                             postfix += nextCharacter;
                         }
                 } // end switch
 
                 count++;
             }
-            while (!operatorStack.isEmpty()) {
+            while (!operatorStack.isEmpty())
+            {
                 topOperator = operatorStack.pop();
                 postfix += topOperator;
             } // append the rest of the operators left in the stack
@@ -61,8 +68,9 @@ public class Calculator<T> { // converts infix expression to the eqivalent postf
     } // end convertToPostfix
 
     static int precedence(char c) // checks for the precedence of each character as it iterates through each case
-    { // allows the program to interate and print out in correctly
-        switch (c) {
+    {                             // allows the program to interate and print out in correctly
+        switch (c)
+         {
             case '+': // precedence of += is less than */
             case '-':
                 return 1;
@@ -136,7 +144,9 @@ public class Calculator<T> { // converts infix expression to the eqivalent postf
     }
 
     // main method
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
+        //beginning of infix to postfix conversion
         String infix = "a*b/(c-a)+d*e"; // infix expression inputted manually
         System.out.println("Infix Expression: " + infix); // system prints out infix expression
         String postfix = convertToPostfix(infix); // calls for the conversion of infix to postfix method

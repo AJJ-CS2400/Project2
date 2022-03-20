@@ -86,58 +86,69 @@ public class Calculator
 
     public static int evaluatePostfix(String postfix)
     {
-        StackInterface<Integer> valueStack = new LinkedStack<Integer>();
-
-        char nextCharacter;
-        int characterCount = postfix.length();
-        int operandOne;
-        int operandTwo;
-        int result;
-
-        int i = 0;
-        while (i < characterCount)
+        // Sanitize inputs
+        if (postfix.isEmpty()) {return 0;}
+        else if (postfix == null) {throw new NullPointerException();}
+        else
         {
-            nextCharacter = postfix.charAt(i);
+            StackInterface<Integer> valueStack = new LinkedStack<Integer>();
 
-            switch (nextCharacter)
+            char nextCharacter;
+            int characterCount = postfix.length();
+            int operandOne;
+            int operandTwo;
+            int result;
+
+            int i = 0;
+            while (i < characterCount)
             {
-                case 'a': case 'b': case 'c': case 'd': case 'e':
-                int temp = Character.getNumericValue(nextCharacter) - 8;
-                valueStack.push(temp);
-                break;
+                nextCharacter = postfix.charAt(i);
 
-                case '+':
-                    operandTwo = valueStack.pop();
-                    operandOne = valueStack.pop();
-                    result = operandOne + operandTwo;
-                    valueStack.push(result);
-                    break;
+                switch (nextCharacter)
+                {
+                    case 'a':
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'e':
+                        int temp = Character.getNumericValue(nextCharacter) - 8;
+                        valueStack.push(temp);
+                        break;
 
-                case '-':
-                    operandTwo = valueStack.pop();
-                    operandOne = valueStack.pop();
-                    result = operandOne - operandTwo;
-                    valueStack.push(result);
-                    break;
+                    case '+':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne + operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                case '*':
-                    operandTwo = valueStack.pop();
-                    operandOne = valueStack.pop();
-                    result = operandOne * operandTwo;
-                    valueStack.push(result);
-                    break;
+                    case '-':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne - operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                case '/':
-                    operandTwo = valueStack.pop();
-                    operandOne = valueStack.pop();
-                    result = operandOne / operandTwo;
-                    valueStack.push(result);
-                    break;
+                    case '*':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne * operandTwo;
+                        valueStack.push(result);
+                        break;
 
-                default: break;
+                    case '/':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = operandOne / operandTwo;
+                        valueStack.push(result);
+                        break;
+
+                    default:
+                        break;
+                }
+                i++;
             }
-            i++;
+            return valueStack.peek();
         }
-        return valueStack.peek();
     }
 }

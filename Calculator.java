@@ -1,5 +1,18 @@
 public class Calculator
 {
+    public static void main(String[] args)
+    {
+        System.out.println("Passing string \"a*b/(c-a)+d*e\" to convertToPostFix method");
+        String infix = "a*b/(c-a)+d*e";
+        String postfix = Calculator.convertToPostfix(infix);
+        System.out.println("Outputted postfix string: \"" + postfix + "\"");
+
+        System.out.println("Passing postfix string \"" + postfix + "\" to evaluatePostfix method");
+        System.out.println("Assuming: a=2, b=3, c=4, d=5, e=6");
+        int result = Calculator.evaluatePostfix("ab*ca-de*+/");
+        System.out.println("Outputted result: " + result);
+    }
+
     public static String convertToPostfix(String infix)
     {
         // Sanitize inputs
@@ -77,13 +90,6 @@ public class Calculator
         }
         return -1;
     } // end precedence
-
-    public static void main(String[] args)
-    {
-        Calculator test = new Calculator();
-        int temp = test.evaluatePostfix("ab*ca-de*+/");
-        System.out.println(temp);
-    }
 
     public static int evaluatePostfix(String postfix)
     {

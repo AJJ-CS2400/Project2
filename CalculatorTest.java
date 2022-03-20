@@ -12,7 +12,7 @@ class CalculatorTest
         String expression1 = "a*b/(c-a)+d*e";
         String expression2 = "";        // empty
         String expression3 = null;      // null
-        Boolean caught = false;
+        boolean caught = false;
 
         // Act
         String postfix1 = Calculator.convertToPostfix(expression1);
@@ -29,7 +29,7 @@ class CalculatorTest
         // Assert
         assertEquals("ab*ca-/de*+", postfix1);
         assertEquals("", postfix2);
-        assertEquals(true, caught);
+        assertTrue(caught);
     }
 
     @Test

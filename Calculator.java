@@ -98,7 +98,7 @@ public class Calculator
         else if (postfix == null) {throw new NullPointerException();}
         else
         {
-            StackInterface<Integer> valueStack = new LinkedStack<Integer>();
+            StackInterface<Integer> valueStack = new LinkedStack<>();
 
             char nextCharacter;
             int characterCount = postfix.length();
@@ -147,6 +147,13 @@ public class Calculator
                         operandTwo = valueStack.pop();
                         operandOne = valueStack.pop();
                         result = operandOne / operandTwo;
+                        valueStack.push(result);
+                        break;
+
+                    case '^':
+                        operandTwo = valueStack.pop();
+                        operandOne = valueStack.pop();
+                        result = (int) Math.pow(operandOne, operandTwo);
                         valueStack.push(result);
                         break;
 

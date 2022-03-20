@@ -12,6 +12,7 @@ class CalculatorTest
         String expression1 = "a*b/(c-a)+d*e";
         String expression2 = "";        // empty
         String expression3 = null;      // null
+        String expression4 = "a^a^a";
         boolean caught = false;
 
         // Act
@@ -25,11 +26,13 @@ class CalculatorTest
         {
             caught = true;
         }
+        String postfix4 = Calculator.convertToPostfix(expression4);
 
         // Assert
         assertEquals("ab*ca-/de*+", postfix1);
         assertEquals("", postfix2);
         assertTrue(caught);
+        assertEquals("aaa^^", postfix4);
     }
 
     @Test
@@ -39,6 +42,7 @@ class CalculatorTest
         String expression1 = "ab*ca-/de*+";
         String expression2 = "";         // empty
         String expression3 = null;       // null
+        String expression4 = "aaa^^";
         boolean caught = false;
 
         // Act
@@ -52,10 +56,12 @@ class CalculatorTest
         {
             caught = true;
         }
+        int result4 = Calculator.evaluatePostfix(expression4);
 
         // Assert
         assertEquals(33, result1);
         assertEquals(0, result2);
         assertTrue(caught);
+        assertEquals(16, result4);
     }
 }

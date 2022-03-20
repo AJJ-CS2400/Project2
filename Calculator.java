@@ -1,6 +1,6 @@
 public class Calculator
 {
-    public String convertToPostfix(String infix)
+    public static String convertToPostfix(String infix)
     {
         // Sanitize inputs
         if (infix.isEmpty()) {return infix;}
@@ -64,7 +64,7 @@ public class Calculator
         }
     } // end convertToPostfix
 
-    private int precedence(char c)
+    private static int precedence(char c)
     {
         switch (c)
         {

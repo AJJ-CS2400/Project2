@@ -50,6 +50,7 @@ public class Calculator
                         {
                             postfix += nextCharacter;
                         }
+                        break; // ignore unexpected characters
                 } // end switch
                 count++;
             }
@@ -144,7 +145,7 @@ public class Calculator
                         break;
 
                     default:
-                        break;
+                        break; // ignore unexpected characters
                 }
                 i++;
             }

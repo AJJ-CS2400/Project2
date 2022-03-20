@@ -13,6 +13,10 @@ public class Calculator
         System.out.println("Outputted result: " + result);
     }
 
+    /** Converts an infix expression to a postfix expression
+     * @param infix the infix expression given as a String
+     * @return Returns the postfix expression as a String
+     */
     public static String convertToPostfix(String infix)
     {
         // Sanitize inputs
@@ -22,7 +26,7 @@ public class Calculator
         {
 
             // Method
-            LinkedStack<Character> operatorStack = new LinkedStack<>();
+            StackInterface<Character> operatorStack = new LinkedStack<>();  // LinkedStack implementation
             String postfix = "";
             char nextCharacter;
             char topOperator;
@@ -71,12 +75,13 @@ public class Calculator
             {
                 topOperator = operatorStack.pop();
                 postfix += topOperator;
-            } // append the rest of the operators left in the stack
+            } // append the rest of the operators left in the stack, if any
 
             return postfix;
         }
     } // end convertToPostfix
 
+    // method for determining the precedence of operations
     private static int precedence(char c)
     {
         switch (c)
@@ -88,9 +93,13 @@ public class Calculator
             case '/':
                 return 2;
         }
-        return -1;
+        return -1;      // failsafe
     } // end precedence
 
+    /** Evaluates a postfix expression, given a=2,b=3,c=4,d=5,and e=6 (a-z = 2-28)
+     * @param postfix the postfix expression given as a String
+     * @return Returns the evaluation of the postfix expression as an Integer.
+     */
     public static int evaluatePostfix(String postfix)
     {
         // Sanitize inputs
@@ -98,7 +107,7 @@ public class Calculator
         else if (postfix == null) {throw new NullPointerException();}
         else
         {
-            StackInterface<Integer> valueStack = new LinkedStack<>();
+            StackInterface<Integer> valueStack = new ResizeableArrayStack<>();  // ResizeableArrayStack implementation
 
             char nextCharacter;
             int characterCount = postfix.length();
@@ -118,9 +127,9 @@ public class Calculator
                     case 'c':
                     case 'd':
                     case 'e':
-                        int temp = Character.getNumericValue(nextCharacter) - 8;
-                        valueStack.push(temp);
-                        break;
+                        int temp = Character.getNumericValue(nextCharacter) - 8;  // converts a-z -> 10-35
+                        valueStack.push(temp);           // subtracting 8 to this value will give:
+                        break;                           // a=2,b=3,c=4,d=5,e=6
 
                     case '+':
                         operandTwo = valueStack.pop();

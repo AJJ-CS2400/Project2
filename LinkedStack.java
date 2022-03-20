@@ -71,7 +71,7 @@ public final class LinkedStack<T> implements StackInterface<T> {
     } // end clear
 
     /**
-     * This is the nodoe
+     * This is the class node 
      *
      * @param Checks and links nodes within the stack.
      *               Checks integrity and capacity

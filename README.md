@@ -22,4 +22,4 @@
 ## Links
 
 - [screencast link]()
-- [index.html]()
+- [index.html](https://github.com/AJJ-CS2400/Project2/blob/master/javadoc/index.html)

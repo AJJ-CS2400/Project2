@@ -9,7 +9,7 @@ public class Calculator
 
         System.out.println("Passing postfix string \"" + postfix + "\" to evaluatePostfix method");
         System.out.println("Assuming: a=2, b=3, c=4, d=5, e=6");
-        int result = Calculator.evaluatePostfix("ab*ca-de*+/");
+        int result = Calculator.evaluatePostfix(postfix);
         System.out.println("Outputted result: " + result);
     }
 
